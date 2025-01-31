@@ -1,0 +1,48 @@
+// Import necessary libraries
+const nlp = require ('compromise'); // For basic NLP tasks
+const graphlib = require ('graphlib'); // For relationship graphs
+const d3 = require('d3'); // Visualization
+/ / Sample Dataset
+const newsData = [
+"Global leaders met today to discuss the rising concerns over climate chan
+"The conference emphasized the urgent need for renewable energy and policy
+"Experts predict a significant shift towards sustainability in the coming
+// 1. Entity Extraction
+function extractEntities (textArray) ‹
+const entities = [];
+textArray. forEach (text => {
+const doc = nlp (text);
+const people = doc.people.out('array');
+const places = doc-places().out( 'array');
+const organizations = doc.organizations).out ('array');
+}) :
+entities.push({ people, places, organizations });
+return entities;
+｝
+// 2. Relationship Mapping
+function mapRelationships (entities) {
+const graph = new graphlib. Graph();
+entities.forEach(entity => {
+entity.people.forEach(person => graph.setNode(person) ); entity.places.forEach(place => graph.setNode(place));
+entity.organizations. forEach(org => graph.setNode(org)):
+return graph;
+}
+// 3. Visualization (using D3.js)
+function renderGraph(graph) <
+const width = 800, height = 600;
+const nodes = graph.nodes() .map (node => ({ id: node }));
+const links = graph. edges () .map(edge => ({
+source: edge.v, target: edge.w
+const svg = d3. create('svg' ).attr('width', width) .attr('height', height);
+const simulation = d3. forceSimulation (nodes)
+force('link', d3. forceLink(links) .distance (100))
+simulation.on( 'tick', 0) => {
+// Update positions (can be expanded for full rendering)
+3);
+document.body.appendChild(svg.node));
+}
+// Running the Functions
+const extractedEntities = extractEntities (newsData) ;
+const relationshipGraph = mapRelationships(extractedEntities);
+renderGraph(relationshipGraph);
+console. log('Entities Extracted:', extractedEntities);
